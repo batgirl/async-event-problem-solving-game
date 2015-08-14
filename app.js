@@ -23,6 +23,7 @@
 
     updateDom();
 
+    // when steps is a multiple of 5, create berries button
     if (userStatus.steps % 5 === 0) {
       var berriesButton = document.createElement("button");
       berriesButton.innerHTML = "pick berries";
@@ -33,13 +34,15 @@
         userStatus.berries += Math.floor(Math.random() * 10) + 1;
         var berriesDiff = userStatus.berries - initialBerries;
         left.innerHTML = left.innerHTML + "<div>you picked " + berriesDiff + " berries</div>";
+        middle.removeChild(berriesButton);
         updateDom();
       };
 
       berriesButton.onclick = berriesClick;
 
-    }; 
+    };
 
+    // when steps is a multiple of 10, create water button
     if (userStatus.steps % 10 === 0) {
       var waterButton = document.createElement("button");
       waterButton.innerHTML = "look for water";
@@ -54,6 +57,7 @@
         else if (waterChance === 2) {
           left.innerHTML = left.innerHTML + "<div>you couldn't find any water</div>";
         }
+        middle.removeChild(waterButton);
         updateDom();
       };
 
