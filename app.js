@@ -36,6 +36,32 @@
         left.innerHTML = left.innerHTML + "<div>you picked " + berriesDiff + " berries</div>";
         middle.removeChild(berriesButton);
         updateDom();
+
+        function eatBerries() {
+          var eatButton = document.createElement("button");
+          eatButton.innerHTML = "eat berries";
+          middle.appendChild(eatButton);
+
+          function eatClick() {
+            if (userStatus.berries > 0) {
+              userStatus.berries -= 1;
+              userStatus.energy += 2;
+              left.innerHTML = left.innerHTML + "<div>you ate berries and gained energy</div>";
+              middle.removeChild(eatButton);
+              updateDom();
+            }
+            else {
+              left.innerHTML = left.innerHTML + "<div>you need more berries</div>";
+              middle.removeChild(eatButton);
+              updateDom();
+            }
+          };
+
+          eatButton.onclick = eatClick;
+        };
+
+        setInterval(eatBerries, 10000);
+
       };
 
       berriesButton.onclick = berriesClick;
