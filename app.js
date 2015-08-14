@@ -24,7 +24,7 @@
     updateDom();
 
     // when steps is a multiple of 5, create berries button
-    if (userStatus.steps % 5 === 0) {
+    if (userStatus.steps % 10 === 0) {
       var berriesButton = document.createElement("button");
       berriesButton.innerHTML = "pick berries";
       middle.appendChild(berriesButton);
@@ -69,7 +69,7 @@
     };
 
     // when steps is a multiple of 10, create water button
-    if (userStatus.steps % 10 === 0) {
+    if (userStatus.steps % 5 === 0) {
       var waterButton = document.createElement("button");
       waterButton.innerHTML = "look for water";
       middle.appendChild(waterButton);
@@ -85,6 +85,32 @@
         }
         middle.removeChild(waterButton);
         updateDom();
+
+        function drinkWater() {
+          var drinkButton = document.createElement("button");
+          drinkButton.innerHTML = "drink water";
+          middle.appendChild(drinkButton);
+
+          function drinkClick() {
+            if (userStatus.water > 0) {
+              userStatus.water -= 1;
+              userStatus.energy += 10;
+              left.innerHTML = left.innerHTML + "<div>you drank water and gained energy</div>";
+              middle.removeChild(drinkButton);
+              updateDom();
+            }
+            else {
+              left.innerHTML = left.innerHTML + "<div>you need more water</div>";
+              middle.removeChild(drinkButton);
+              updateDom();
+            }
+          };
+
+          drinkButton.onclick = drinkClick;
+        };
+
+        setInterval(drinkWater, 9000);
+
       };
 
       waterButton.onclick = waterClick;
