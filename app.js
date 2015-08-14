@@ -4,7 +4,8 @@
     energy: 100,
     steps: 0,
     berries: 0,
-    water: 0
+    water: 0,
+    meat: 0
   };
 
   var status = document.getElementById("status");
@@ -17,7 +18,7 @@
     function enableButton() {
       button.removeAttribute("disabled");
     };
-    setTimeout(enableButton, 250);
+    setTimeout(enableButton, 3000);
     userStatus.steps++;
     left.innerHTML = left.innerHTML + "<div>you continue down the trail</div>";
 
@@ -109,13 +110,62 @@
           drinkButton.onclick = drinkClick;
         };
 
-        setInterval(drinkWater, 9000);
+        setInterval(drinkWater, 5000);
 
       };
 
       waterButton.onclick = waterClick;
 
     };
+
+    if (userStatus.steps % 20 === 0) {
+      var huntButton = document.createElement("button");
+      huntButton.innerHTML = "go hunt";
+      middle.appendChild(huntButton);
+
+      function huntClick() {
+        var huntChance = Math.floor(Math.random() * 2) + 1;
+        if (huntChance === 1) {
+          userStatus.meat++;
+          userStatus.energy--;
+          left.innerHTML = left.innerHTML + "<div>you found an animal</div>";
+        }
+        else if (huntChance === 2) {
+          userStatus.energy--;
+          left.innerHTML = left.innerHTML + "<div>you couldn't find any animals</div>";
+        }
+        middle.removeChild(huntButton);
+        updateDom();
+
+        function eatMeat() {
+          var meatButton = document.createElement("button");
+          meatButton.innerHTML = "eat meat";
+          middle.appendChild(meatButton);
+
+          function meatClick() {
+            if (userStatus.meat > 0) {
+              userStatus.meat -= 1;
+              userStatus.energy += 15;
+              left.innerHTML = left.innerHTML + "<div>you ate meat and gained energy</div>";
+              middle.removeChild(meatButton);
+              updateDom();
+            }
+            else {
+              left.innerHTML = left.innerHTML + "<div>you need more meat</div>";
+              middle.removeChild(meatButton);
+              updateDom();
+            }
+          };
+
+          meatButton.onclick = meatClick;
+        };
+
+        setInterval(eatMeat, 15000);
+
+      };
+
+      huntButton.onclick = huntClick;
+    }
 
     userStatus.energy -= Math.floor(Math.random() * 10) + 1;
     updateDom(); 
