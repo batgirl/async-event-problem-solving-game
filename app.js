@@ -3,7 +3,8 @@
   var userStatus = {
     energy: 100,
     steps: 0,
-    berries: 0
+    berries: 0,
+    water: 0
   };
 
   var status = document.getElementById("status");
@@ -16,7 +17,7 @@
     function enableButton() {
       button.removeAttribute("disabled");
     };
-    setTimeout(enableButton, 500);
+    setTimeout(enableButton, 250);
     userStatus.steps++;
     left.innerHTML = left.innerHTML + "<div>you continue down the trail</div>";
 
@@ -33,9 +34,30 @@
         var berriesDiff = userStatus.berries - initialBerries;
         left.innerHTML = left.innerHTML + "<div>you picked " + berriesDiff + " berries</div>";
         updateDom();
-      }
+      };
 
       berriesButton.onclick = berriesClick;
+
+    }; 
+
+    if (userStatus.steps % 10 === 0) {
+      var waterButton = document.createElement("button");
+      waterButton.innerHTML = "look for water";
+      middle.appendChild(waterButton);
+
+      function waterClick() {
+        var waterChance = Math.floor(Math.random() * 2) + 1;
+        if (waterChance === 1) {
+          userStatus.water++;
+          left.innerHTML = left.innerHTML + "<div>you found water</div>";
+        }
+        else if (waterChance === 2) {
+          left.innerHTML = left.innerHTML + "<div>you couldn't find any water</div>";
+        }
+        updateDom();
+      };
+
+      waterButton.onclick = waterClick;
 
     }; 
 
