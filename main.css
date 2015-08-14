@@ -1,0 +1,10 @@
+#left, #right, #middle {
+  width: 33%;
+  float: left;
+  min-height: 100px;
+}
+
+#status {
+  border: 2px solid #000;
+  padding: 10px;
+}
