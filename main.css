@@ -8,3 +8,12 @@
   border: 2px solid #000;
   padding: 10px;
 }
+
+#left {
+  padding-top: 5px;
+  padding-left: 8px;
+}
+
+div {
+  padding-bottom: 3px;
+}

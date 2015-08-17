@@ -13,6 +13,7 @@
   var button = document.getElementById("walk");
   var middle = document.getElementById("middle");
   var left = document.getElementById("left");
+  var timer = document.getElementById("timer");
   // this function represents the button hard coded in the HTML
   function firstClick() {
     // on click the button will be disabled for 3 seconds
@@ -26,24 +27,30 @@
     updateDom();
     // when steps is a multiple of 5, the berries button is created
     if (userStatus.steps % 5 === 0) {
-      var berriesButton = document.createElement("button");
-      berriesButton.innerHTML = "pick berries";
-      middle.appendChild(berriesButton);
-      function berriesClick() {
-        // after the berries button has been clicked, it changes the users' status and is removed
-        var initialBerries = userStatus.berries;
-        userStatus.berries += Math.floor(Math.random() * 10) + 1;
-        var berriesDiff = userStatus.berries - initialBerries;
-        left.innerHTML = left.innerHTML + "<div>you picked " + berriesDiff + " berries</div>";
-        middle.removeChild(berriesButton);
-        updateDom();
-        function eatBerries() {
-          // when the eat berries button is clicked, it changes the user status and is removed
+        var berriesButton = document.createElement("button");
+        berriesButton.innerHTML = "pick berries";
+        middle.appendChild(berriesButton);
+        function berriesClick() {
+          // after the berries button has been clicked, it changes the users' status and is removed
+          var initialBerries = userStatus.berries;
+          userStatus.berries += Math.floor(Math.random() * 10) + 1;
+          var berriesDiff = userStatus.berries - initialBerries;
+          left.innerHTML = left.innerHTML + "<div>you picked " + berriesDiff + " berries</div>";
+          middle.removeChild(berriesButton);
+          updateDom();
+          // define the button variable above where it is referenced
           var eatButton = document.createElement("button");
-          eatButton.innerHTML = "eat berries";
-          middle.appendChild(eatButton);
+              eatButton.setAttribute("id", "hungry");
+              eatButton.innerHTML = "eat berries";
+          function eatBerries() {
+            // if an element with an id of hungry does not exist, create one
+            if (!document.getElementById("hungry")) {
+              middle.appendChild(eatButton);
+            };
+          };
+          // check for this condition every 5 seconds
+          setInterval(eatBerries, 5000);
           function eatClick() {
-            // as long as the user has berries, this will change the users' status and remove the button
             if (userStatus.berries > 0) {
               userStatus.berries -= 1;
               userStatus.energy += 2;
@@ -59,10 +66,7 @@
           };
           eatButton.onclick = eatClick;
         };
-        // the eat berries button appears after 10 seconds
-        setInterval(eatBerries, 10000);
-      };
-      berriesButton.onclick = berriesClick;
+        berriesButton.onclick = berriesClick;
     };
     // when steps is a multiple of 10, a water button is created
     if (userStatus.steps % 10 === 0) {
@@ -81,31 +85,33 @@
         };
         middle.removeChild(waterButton);
         updateDom();
+        var drinkButton = document.createElement("button");
+        drinkButton.setAttribute("id", "thirsty");
+        drinkButton.innerHTML = "drink water";
         function drinkWater() {
-          var drinkButton = document.createElement("button");
-          drinkButton.innerHTML = "drink water";
-          middle.appendChild(drinkButton);
-          function drinkClick() {
-            // this button changes the users' status and removes the button
-            if (userStatus.water > 0) {
-              userStatus.water -= 1;
-              userStatus.energy += 10;
-              left.innerHTML = left.innerHTML + "<div>you drank water and gained energy</div>";
-              middle.removeChild(drinkButton);
-              updateDom();
-            }
-            else {
-              left.innerHTML = left.innerHTML + "<div>you need more water</div>";
-              middle.removeChild(drinkButton);
-              updateDom();
-            };
+          if (!document.getElementById("thirsty")) {
+            middle.appendChild(drinkButton);
           };
-          drinkButton.onclick = drinkClick;
         };
-        // the drink water button will appear after 5 seconds
         setInterval(drinkWater, 5000);
+        function drinkClick() {
+          // this button changes the users' status and removes the button
+          if (userStatus.water > 0) {
+            userStatus.water -= 1;
+            userStatus.energy += 10;
+            left.innerHTML = left.innerHTML + "<div>you drank water and gained energy</div>";
+            middle.removeChild(drinkButton);
+            updateDom();
+          }
+          else {
+            left.innerHTML = left.innerHTML + "<div>you need more water</div>";
+            middle.removeChild(drinkButton);
+            updateDom();
+          };
+        };
+        drinkButton.onclick = drinkClick;
       };
-      waterButton.onclick = waterClick;
+      waterButton.onclick = waterClick;      
     };
     // when steps is a multiple of 20, a go hunt button is created
     if (userStatus.steps % 20 === 0) {
@@ -157,7 +163,13 @@
     updateDom(); 
   };
   button.onclick = firstClick;
-  //this refreshes the status log on the right side of the DOM
+  var counter = 0;
+  // this creates a counter that displays above the status log
+  function updateTimer() {
+    counter++;
+    timer.innerHTML = "<div>timer: " + counter + "</div>";
+  }
+  // this refreshes the status log on the right side of the DOM
   function updateDom() {
     status.innerHTML = "";
     for (key in userStatus) {
@@ -166,5 +178,6 @@
       }
     }
   }
+  window.setInterval(updateTimer, 1000);
   updateDom();
 })();
